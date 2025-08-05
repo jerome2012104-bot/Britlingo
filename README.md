@@ -4,7 +4,6 @@ https://github.com/DEINNAME/britlingo
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>GitHub Helfer – Description & README kopieren</title>
   <style>
     body {
       font-family: Arial, sans-serif;
