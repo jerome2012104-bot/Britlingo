@@ -1,119 +1,164 @@
-# Britlingo
-https://github.com/DEINNAME/britlingo
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BritLingo – British English Quiz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      background: #f0f4f8;
+      background: #f0f8ff;
+      margin: 0;
       padding: 20px;
-      border-radius: 10px;
       text-align: center;
-      color: #222;
     }
+
     h1 {
-      color: #0366d6;
+      color: #1e90ff;
     }
-    button {
-      margin: 12px;
+
+    .quiz-box {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    .question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      display: block;
+      margin: 10px 0;
+      padding: 14px;
+      background: #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .option:hover {
+      background: #d0d0d0;
+    }
+
+    #result {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
       padding: 12px 24px;
       font-size: 16px;
-      cursor: pointer;
+      background-color: #1e90ff;
+      color: white;
       border: none;
       border-radius: 8px;
-      background-color: #28a745;
-      color: white;
-      transition: background-color 0.3s ease;
+      cursor: pointer;
     }
-    button:hover {
-      background-color: #1e7e34;
+
+    #nextBtn:hover {
+      background-color: #187bcd;
     }
-    #feedback {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #155724;
-    }
-    textarea {
-      width: 100%;
-      height: 200px;
-      margin-top: 20px;
-      font-family: monospace;
-      font-size: 14px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      resize: vertical;
+
+    @media (max-width: 600px) {
+      .quiz-box {
+        padding: 15px;
+      }
+      .option {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>GitHub Helfer</h1>
-  <p>Einfach Klick auf einen Button, um Text in die Zwischenablage zu kopieren.</p>
+  <h1>🇬🇧 BritLingo Quiz</h1>
+  <p>Lerne britisches Englisch mit einem kurzen Multiple-Choice-Quiz!</p>
 
-  <button onclick="copyDescription()">Beschreibung kopieren</button>
-  <button onclick="copyReadme()">README.md Vorlage kopieren</button>
-
-  <div id="feedback"></div>
-
-  <textarea id="readmePreview" readonly></textarea>
+  <div class="quiz-box">
+    <div id="question" class="question">Lade Frage...</div>
+    <div id="options"></div>
+    <div id="result"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Nächste Frage</button>
+  </div>
 
   <script>
-    const descriptionText = "Mini-Web-App zum Lernen von britischem Englisch mit Multiple-Choice-Quiz";
+    const quiz = [
+      {
+        question: "What does 'loo' mean in British English?",
+        options: ["Lunch", "Toilet", "Bus", "Money"],
+        answer: "Toilet"
+      },
+      {
+        question: "What is a 'biscuit' in the UK?",
+        options: ["Cake", "Bread", "Cookie", "Cracker"],
+        answer: "Cookie"
+      },
+      {
+        question: "What does 'petrol' mean in British English?",
+        options: ["Gasoline", "Water", "Oil", "Juice"],
+        answer: "Gasoline"
+      },
+      {
+        question: "What is the British word for 'truck'?",
+        options: ["Wagon", "Van", "Lorry", "Train"],
+        answer: "Lorry"
+      },
+      {
+        question: "What is a 'boot' on a British car?",
+        options: ["Engine", "Trunk", "Seat", "Tyre"],
+        answer: "Trunk"
+      }
+    ];
 
-    const readmeText = `# BritLingo
+    let current = 0;
 
-Eine Mini-Web-App zum Lernen von britischem Englisch mit Multiple-Choice-Quiz.
+    function loadQuestion() {
+      const q = quiz[current];
+      document.getElementById("question").textContent = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      document.getElementById("result").textContent = "";
 
-## Features
-
-- Interaktives Quiz mit britischen Vokabeln und Ausdrücken  
-- Einfaches Interface, ideal zum Sprachenlernen  
-- Direkt im Browser nutzbar, keine Installation notwendig
-
-## Installation
-
-Einfach die Datei \`britlingo.html\` im Browser öffnen.
-
-## Nutzung
-
-Beantworte die Fragen und verbessere dein Englisch!
-
-## Lizenz
-
-MIT License
-
----
-
-*Dieses Projekt wurde mit ChatGPT erstellt.*`;
-
-    const feedback = document.getElementById("feedback");
-    const readmePreview = document.getElementById("readmePreview");
-
-    function copyDescription() {
-      navigator.clipboard.writeText(descriptionText).then(() => {
-        feedback.textContent = "Beschreibung wurde kopiert!";
-        feedback.style.color = "#155724";
-      }).catch(() => {
-        feedback.textContent = "Kopieren fehlgeschlagen. Bitte manuell kopieren.";
-        feedback.style.color = "#721c24";
+      q.options.forEach(option => {
+        const btn = document.createElement("div");
+        btn.textContent = option;
+        btn.className = "option";
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
       });
     }
 
-    function copyReadme() {
-      navigator.clipboard.writeText(readmeText).then(() => {
-        feedback.textContent = "README.md Vorlage wurde kopiert!";
-        feedback.style.color = "#155724";
-        readmePreview.value = readmeText;
-      }).catch(() => {
-        feedback.textContent = "Kopieren fehlgeschlagen. Bitte manuell kopieren.";
-        feedback.style.color = "#721c24";
-      });
+    function checkAnswer(selected) {
+      const correct = quiz[current].answer;
+      const result = document.getElementById("result");
+      if (selected === correct) {
+        result.textContent = "✅ Richtig!";
+        result.style.color = "green";
+      } else {
+        result.textContent = `❌ Falsch! Richtige Antwort: ${correct}`;
+        result.style.color = "red";
+      }
     }
+
+    function nextQuestion() {
+      current++;
+      if (current < quiz.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("question").textContent = "🎉 Du hast das Quiz beendet!";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("result").textContent = "";
+      }
+    }
+
+    window.onload = loadQuestion;
   </script>
 
 </body>
