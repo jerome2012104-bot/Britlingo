@@ -137,29 +137,4 @@
     function checkAnswer(selected) {
       const correct = quiz[current].answer;
       const result = document.getElementById("result");
-      if (selected === correct) {
-        result.textContent = "✅ Richtig!";
-        result.style.color = "green";
-      } else {
-        result.textContent = `❌ Falsch! Richtige Antwort: ${correct}`;
-        result.style.color = "red";
-      }
-    }
-
-    function nextQuestion() {
-      current++;
-      if (current < quiz.length) {
-        loadQuestion();
-      } else {
-        document.getElementById("question").textContent = "🎉 Du hast das Quiz beendet!";
-        document.getElementById("options").innerHTML = "";
-        document.getElementById("nextBtn").style.display = "none";
-        document.getElementById("result").textContent = "";
-      }
-    }
-
-    window.onload = loadQuestion;
-  </script>
-
-</body>
-</html>
+      if (selected === correct)
